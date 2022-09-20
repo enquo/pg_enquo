@@ -1,10 +1,10 @@
-use enquo_core::EncryptedValue;
+use enquo_core::I64;
 use pgx::*;
 use serde::{Serialize, Deserialize};
 
 #[derive(Serialize, Deserialize, Debug, PostgresType, PostgresEq, PostgresOrd, Ord, Eq, PartialOrd, PartialEq)]
 #[allow(non_camel_case_types)]
-pub struct enquo_bigint(EncryptedValue);
+pub struct enquo_bigint(I64);
 
 #[cfg(any(test, feature = "pg_test"))]
 #[pg_schema]
