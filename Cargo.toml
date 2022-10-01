@@ -16,7 +16,7 @@ pg14 = ["pgx/pg14", "pgx-tests/pg14" ]
 pg_test = []
 
 [dependencies]
-enquo-core = { git = "ssh+git://github.com/enquo/enquo-core" }
+enquo-core = "0.1"
 pgx = { git = "https://github.com/mpalmer/pgx", branch = "filter-datums" }
 serde = "1.0"
 serde_json = "1.0"
