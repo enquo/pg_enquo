@@ -1,0 +1,62 @@
+name: "Pre-merge Quality-Control"
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    name: "Test"
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Install rust
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+
+      - uses: actions/cache@v2
+        with:
+          path: |
+            ~/.cargo/git
+            ~/.cargo/registry
+            target/
+          key: ${{ runner.os }}-${{ steps.rust-install.outputs.rustc_hash}}-cargo
+
+      - name: Run testsuite
+        run: |
+          cargo test
+
+  qc:
+    runs-on: ubuntu-latest
+    name: "Quality Control"
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Install rust
+        id: rust-install
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          components: rustfmt, clippy
+
+      - uses: actions/cache@v2
+        with:
+          path: |
+            ~/.cargo/git
+            ~/.cargo/registry
+            target/
+          key: ${{ runner.os }}-${{ steps.rust-install.outputs.rustc_hash}}-cargo
+
+      - name: Check formatting
+        run: |
+          cargo fmt --check
+
+      - name: Consult Clippy
+        run: |
+          cargo clippy -- -D warnings
