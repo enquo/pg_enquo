@@ -1,5 +1,5 @@
-use pgx::*;
 use enquo_core::{Field, Root};
+use pgx::*;
 
 pub fn field() -> Field {
     let k: &[u8] = b"testkey";
