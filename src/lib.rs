@@ -1,6 +1,12 @@
 use pgx::*;
 
+mod value_options;
+use value_options::ValueOptions;
+
 mod bigint;
+
+#[cfg(any(test, feature = "pg_test"))]
+mod test_helpers;
 
 pg_module_magic!();
 
