@@ -11,6 +11,10 @@ jobs:
     runs-on: ubuntu-latest
     name: "Test"
 
+    strategy:
+      matrix:
+        pg_version: ["10", "11", "12", "13", "14"]
+
     steps:
       - uses: actions/checkout@v2
 
@@ -24,8 +28,14 @@ jobs:
           path: |
             ~/.cargo/git
             ~/.cargo/registry
+            ~/.pgx
             target/
-          key: ${{ runner.os }}-${{ steps.rust-install.outputs.rustc_hash}}-cargo
+          key: ${{ runner.os }}-${{ steps.rust-install.outputs.rustc_hash}}-${{ matrix.pg_version }}
+
+      - name: Init pgx
+        run: |
+          cargo install cargo-pgx -v =0.4.5
+          cargo pgx init --pg${{ matrix.pg_version }}=download
 
       - name: Run testsuite
         run: |
