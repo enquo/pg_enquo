@@ -30,11 +30,11 @@ jobs:
             ~/.cargo/registry
             ~/.pgx
             target/
-          key: ${{ runner.os }}-${{ steps.rust-install.outputs.rustc_hash}}-${{ matrix.pg_version }}
+          key: ${{ runner.os }}-${{ steps.rust-install.outputs.rustc_hash}}-pg${{ matrix.pg_version }}
 
       - name: Init pgx
         run: |
-          cargo install cargo-pgx -v =0.4.5
+          cargo install cargo-pgx --version 0.4.5
           cargo pgx init --pg${{ matrix.pg_version }}=download
 
       - name: Run testsuite
@@ -60,8 +60,14 @@ jobs:
           path: |
             ~/.cargo/git
             ~/.cargo/registry
+            ~/.pgx
             target/
-          key: ${{ runner.os }}-${{ steps.rust-install.outputs.rustc_hash}}-cargo
+          key: ${{ runner.os }}-${{ steps.rust-install.outputs.rustc_hash}}-pg14
+
+      - name: Init pgx
+        run: |
+          cargo install cargo-pgx --version 0.4.5
+          cargo pgx init --pg14=download
 
       - name: Check formatting
         run: |
