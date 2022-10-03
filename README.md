@@ -1,52 +1,40 @@
 A Postgres extension to provide Encrypted Query Operations (`enquo`).
 
+This extension is typically used in conjunction with a client library that produces Enquo ciphertexts for storage and querying within a Postgres database using `pg_enquo`.
+See [the Enquo 'Components' page](https://enquo.org/components) for details of available client libraries.
+
 
 # Installation
 
-## Pre-requisites
-
-* A relatively recent [Rust](https://rust-lang.org) toolchain; and
-
-* A Postgres installation, including the server-side development headers (for Debian/Ubuntu, these are in the `postgresql-server-dev-NN` package)
-
-
-## Steps
-
-1. Install `cargo-pgx`, with `cargo install cargo-pgx`
-
-2. Configure `cargo-pgx`, with `cargo pgx init --pgNN=$(which pg_config)`
-
-   Where `NN` is the major version of your Postgres installation (eg `--pg14=$(which pg_config)` if you're running Postgres 14)
-
-3. Run `cargo pgx install --release` (this command requires write access to the directories specified by `PKGLIBDIR` and `SHAREDIR` in the output of `pg_config`)
-
-If all goes well, you should be able to now enable the extension in any database of your choice with `CREATE EXTENSION pg_enquo;`
+See [doc/installation.md](doc/installation.md) for all the details.
 
 
 # Development
 
-Welcome to the hidden world of Rust-based Postgres extensions.
-We've got cake!
+See [doc/development.md](doc/development.md).
 
 
-## Pre-requisites
+# Licence
 
-* A relatively recent [Rust](https://rust-lang.org) toolchain.
+Unless otherwise stated, everything in this repo is covered by the following
+licence statement ("the MIT licence"):
 
+    Copyright (C) 2022  Matt Palmer <matt@enquo.org>
 
-## Steps
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+    of this software and associated documentation files (the "Software"), to deal
+    in the Software without restriction, including without limitation the rights
+    to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+    copies of the Software, and to permit persons to whom the Software is
+    furnished to do so, subject to the following conditions:
 
-1. Install `cargo-pgx`, with `cargo install cargo-pgx`
+    The above copyright notice and this permission notice shall be included in
+    all copies or substantial portions of the Software.
 
-2. Configure `cargo-pgx`, with `cargo pgx init --pgNN=download`
-
-   Where `NN` is the major version of the Postgres version you want to use as your "primary" test platform.
-
-   Note that you can replace the `--pgNN=download` option with `--pgNN=<path to pg_config>`, if you already have a Postgres installation.
-   However, this installation must be writable by your user.
-
-3. Hack away to your heart's content.
-
-4. To run the test suite, run `cargo pgx test`
-
-5. To get a running Postgres with your current extension available for use, run `cargo pgx run`.
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+    THE SOFTWARE.
