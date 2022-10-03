@@ -1,39 +1,21 @@
 use enquo_core::I64;
 use pgx::*;
 use serde::{Deserialize, Serialize};
-use std::cmp::Ordering;
 
-use crate::ValueOptions;
-
-#[derive(Serialize, Deserialize, Debug, PostgresType, PostgresEq, PostgresOrd)]
+#[derive(
+    Serialize,
+    Deserialize,
+    Debug,
+    Ord,
+    PartialOrd,
+    Eq,
+    PartialEq,
+    PostgresType,
+    PostgresEq,
+    PostgresOrd,
+)]
 #[allow(non_camel_case_types)]
-pub struct enquo_bigint {
-    #[serde(rename = "v")]
-    value: I64,
-
-    #[serde(rename = "$")]
-    options: Option<Vec<ValueOptions>>,
-}
-
-impl Ord for enquo_bigint {
-    fn cmp(&self, other: &Self) -> Ordering {
-        self.value.cmp(&other.value)
-    }
-}
-
-impl PartialOrd for enquo_bigint {
-    fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
-        Some(self.cmp(other))
-    }
-}
-
-impl PartialEq for enquo_bigint {
-    fn eq(&self, other: &Self) -> bool {
-        self.cmp(other) == Ordering::Equal
-    }
-}
-
-impl Eq for enquo_bigint {}
+pub struct enquo_bigint(I64);
 
 #[cfg(any(test, feature = "pg_test"))]
 #[pg_schema]
@@ -92,7 +74,7 @@ mod tests {
         let s = serde_json::to_string(&value).unwrap();
 
         Spi::run(&format!(
-            r#"INSERT INTO bigint_tests VALUES ('42', '{{"v":{}}}')"#,
+            r#"INSERT INTO bigint_tests VALUES ('42', '{}')"#,
             s
         ));
     }
@@ -102,20 +84,18 @@ mod tests {
         create_test_table();
 
         for i in 0..10 {
-            let mut value = I64::new(i, b"test", &field()).unwrap();
-            value.clear_left_ciphertexts();
+            let value = I64::new(i, b"test", &field()).unwrap();
             let s = serde_json::to_string(&value).unwrap();
             Spi::run(&format!(
-                r#"INSERT INTO bigint_tests VALUES ('{}', '{{"v":{}}}')"#,
+                r#"INSERT INTO bigint_tests VALUES ('{}', '{}')"#,
                 i, s
             ));
         }
 
-        let v4 = I64::new(4, b"test", &field()).unwrap();
-        let s4 = format!(
-            r#"{{"v":{},"$":["KeepLeft"]}}"#,
-            serde_json::to_string(&v4).unwrap()
-        );
+        let v4 = I64::new_with_unsafe_parts(4, b"test", &field()).unwrap();
+        let s4 = serde_json::to_string(&v4).unwrap();
+
+        log!("{}", &s4);
 
         assert_eq!(
             "4",
@@ -165,24 +145,23 @@ mod tests {
         create_test_table();
         create_test_index();
 
-        let mut value = I64::new(0, b"test", &field()).unwrap();
-        value.clear_left_ciphertexts();
+        let value = I64::new(0, b"test", &field()).unwrap();
         let s = serde_json::to_string(&value).unwrap();
         Spi::run(&format!(
-            r#"INSERT INTO bigint_tests VALUES ('{}', '{{"v":{}}}')"#,
+            r#"INSERT INTO bigint_tests VALUES ('{}', '{}')"#,
             0, s
         ));
     }
 
     #[pg_test]
-    fn indexing_with_left_ciphertexts_succeeds() {
+    fn indexing_with_unsafe_parts_succeeds() {
         create_test_table();
         create_test_index();
 
-        let value = I64::new(0, b"test", &field()).unwrap();
+        let value = I64::new_with_unsafe_parts(0, b"test", &field()).unwrap();
         let s = serde_json::to_string(&value).unwrap();
         Spi::run(&format!(
-            r#"INSERT INTO bigint_tests VALUES ('{}', '{{"v":{}}}')"#,
+            r#"INSERT INTO bigint_tests VALUES ('{}', '{}')"#,
             0, s
         ));
     }
@@ -193,11 +172,10 @@ mod tests {
         create_test_table();
 
         for i in 0..10 {
-            let mut value = I64::new(i, b"test", &field()).unwrap();
-            value.clear_left_ciphertexts();
+            let value = I64::new(i, b"test", &field()).unwrap();
             let s = serde_json::to_string(&value).unwrap();
             Spi::run(&format!(
-                r#"INSERT INTO bigint_tests VALUES ('{}', '{{"v":{}}}')"#,
+                r#"INSERT INTO bigint_tests VALUES ('{}', '{}')"#,
                 i, s
             ));
         }
