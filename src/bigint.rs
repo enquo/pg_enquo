@@ -6,7 +6,6 @@ use std::cmp::Ordering;
 use crate::ValueOptions;
 
 #[derive(Serialize, Deserialize, Debug, PostgresType, PostgresEq, PostgresOrd)]
-#[filter_datum]
 #[allow(non_camel_case_types)]
 pub struct enquo_bigint {
     #[serde(rename = "v")]
@@ -14,24 +13,6 @@ pub struct enquo_bigint {
 
     #[serde(rename = "$")]
     options: Option<Vec<ValueOptions>>,
-}
-
-impl IntoDatumFilter for enquo_bigint {
-    fn filter_for_datum(self) -> Self {
-        let mut obj = self;
-        match &obj.options {
-            Some(opts) => {
-                if !opts.contains(&ValueOptions::KeepLeft) {
-                    obj.value.clear_left_ciphertexts();
-                }
-            }
-            None => {
-                obj.value.clear_left_ciphertexts();
-            }
-        }
-
-        obj
-    }
 }
 
 impl Ord for enquo_bigint {
@@ -60,7 +41,6 @@ mod tests {
     use super::*;
     use crate::test_helpers::*;
     use enquo_core::I64;
-    use pgx::*;
     use serde_json;
 
     fn create_test_table() {
@@ -118,11 +98,12 @@ mod tests {
     }
 
     #[pg_test]
-    fn querying() {
+    fn querying_without_left_ciphertexts() {
         create_test_table();
 
         for i in 0..10 {
-            let value = I64::new(i, b"test", &field()).unwrap();
+            let mut value = I64::new(i, b"test", &field()).unwrap();
+            value.clear_left_ciphertexts();
             let s = serde_json::to_string(&value).unwrap();
             Spi::run(&format!(
                 r#"INSERT INTO bigint_tests VALUES ('{}', '{{"v":{}}}')"#,
@@ -179,33 +160,49 @@ mod tests {
     }
 
     #[pg_test]
-    fn left_ciphertexts_filtered_by_default() {
+    #[should_panic]
+    fn indexing_without_left_ciphertexts_fails() {
         create_test_table();
+        create_test_index();
 
-        Spi::run(
-            r#"INSERT INTO bigint_tests VALUES ('', '{"v":{"v1":{"a":{"iv":[],"ct":[]},"o":{"l":[1,2,3,4,5],"r":[]},"k":[]}}}')"#,
-        );
-        let r = Spi::get_one::<enquo_bigint>("SELECT bi FROM bigint_tests").unwrap();
-
-        match &r.value {
-            I64::v1(v) => assert_eq!(None, v.ore_ciphertext.left),
-            _ => panic!("How did we get a non-v1 value here?!?"),
-        };
+        let mut value = I64::new(0, b"test", &field()).unwrap();
+        value.clear_left_ciphertexts();
+        let s = serde_json::to_string(&value).unwrap();
+        Spi::run(&format!(
+            r#"INSERT INTO bigint_tests VALUES ('{}', '{{"v":{}}}')"#,
+            0, s
+        ));
     }
 
     #[pg_test]
-    fn left_ciphertexts_kept_if_requested() {
+    fn indexing_with_left_ciphertexts_succeeds() {
+        create_test_table();
+        create_test_index();
+
+        let value = I64::new(0, b"test", &field()).unwrap();
+        let s = serde_json::to_string(&value).unwrap();
+        Spi::run(&format!(
+            r#"INSERT INTO bigint_tests VALUES ('{}', '{{"v":{}}}')"#,
+            0, s
+        ));
+    }
+
+    #[pg_test]
+    #[should_panic]
+    fn order_by_without_left_ciphertexts_fails() {
         create_test_table();
 
-        Spi::run(
-            r#"INSERT INTO bigint_tests VALUES ('', '{"v":{"v1":{"a":{"iv":[],"ct":[]},"o":{"l":[1,2,3,4,5],"r":[]},"k":[]}},"$":["KeepLeft"]}')"#,
-        );
-        let r = Spi::get_one::<enquo_bigint>("SELECT bi FROM bigint_tests").unwrap();
+        for i in 0..10 {
+            let mut value = I64::new(i, b"test", &field()).unwrap();
+            value.clear_left_ciphertexts();
+            let s = serde_json::to_string(&value).unwrap();
+            Spi::run(&format!(
+                r#"INSERT INTO bigint_tests VALUES ('{}', '{{"v":{}}}')"#,
+                i, s
+            ));
+        }
 
-        match &r.value {
-            I64::v1(v) => assert!(matches!(v.ore_ciphertext.left, Some(_))),
-
-            _ => panic!("How did we get a non-v1 value here?!?"),
-        };
+        // Uncomment once we're on 0.5.0, https://github.com/tcdi/pgx/issues/728
+        //Spi::run("SELECT id FROM bigint_tests ORDER BY bi");
     }
 }
