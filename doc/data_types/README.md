@@ -3,7 +3,8 @@ They are named for the corresponding PostgresSQL data types that they emulate.
 However, it is important to bear in mind that, due to the limitations of cryptographic research, they typically only support a subset of the features of the native data type.
 Please read the documentation for the data type for full details of what is and is not supported, and any security caveats surrounding them.
 
-* [`bigint`](bigint.md) -- 64-bit signed integer, capable of storing values from `-2^63` to `2^63-1`.
+* [`enquo_bigint`](bigint.md) -- 64-bit signed integer, capable of storing values from `-2^63` to `2^63-1`.
+* [`enquo_date`](date.md) -- a calendar date.
 
 
 # A Note on "Reduced Security Operations"
