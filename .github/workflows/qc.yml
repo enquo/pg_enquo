@@ -39,7 +39,7 @@ jobs:
 
       - name: Run testsuite
         run: |
-          cargo test
+          cargo pgx test pg${{ matrix.pg_version }}
 
   qc:
     runs-on: ubuntu-latest
@@ -75,4 +75,4 @@ jobs:
 
       - name: Consult Clippy
         run: |
-          cargo clippy -- -D warnings
+          cargo clippy --features=pg14 -- -D warnings
