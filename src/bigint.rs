@@ -95,8 +95,6 @@ mod tests {
         let v4 = I64::new_with_unsafe_parts(4, b"test", &field()).unwrap();
         let s4 = serde_json::to_string(&v4).unwrap();
 
-        log!("{}", &s4);
-
         assert_eq!(
             "4",
             Spi::get_one_with_args::<String>(
