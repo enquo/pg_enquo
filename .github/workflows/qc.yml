@@ -39,7 +39,7 @@ jobs:
 
       - name: Run testsuite
         run: |
-          cargo pgx test pg${{ matrix.pg_version }}
+          cargo pgx test --features pg${{ matrix.pg_version}} pg${{ matrix.pg_version }}
 
   qc:
     runs-on: ubuntu-latest
