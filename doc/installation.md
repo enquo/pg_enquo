@@ -14,7 +14,8 @@ cargo version
 ```
 
 If it says something like `cargo 1.61.0`, then you're ready to go.
-If it reports "command not found" or similar, then visit [the Rust project installation instructions](https://www.rust-lang.org/learn/get-started) for the easiest way to get going.
+An older version number indicates you'll need to upgrade Rust, which is just a `rustup upgrade` (or via your package manager).
+Alternately, if it reports "command not found" or similar, then visit [the Rust project installation instructions](https://www.rust-lang.org/learn/get-started) for the easiest way to get going.
 
 
 ## Ensure `rustfmt` is Available
@@ -37,7 +38,7 @@ You will need to have an installation of PostgreSQL 11 or later in order to buil
 
 Note that you also need to have the server-side development headers for PostgreSQL installed.
 If you are running a packaged version of PostgreSQL, these may be in a package that isn't installed by default.
-For example, for Debian/Ubuntu, the server-side development headers are in a package named **`postgresql-server-dev-NN`**, where `NN` is the major version of PostgreSQL, such as `11`, `12`, `13`, or `14`.
+For example, for Debian/Ubuntu, the server-side development headers are in a package named **`postgresql-server-dev-14`** (switch out the `14` for your PostgreSQL major version, if you running an older version).
 
 
 ## Install and Configure `cargo-pgx`
@@ -46,9 +47,9 @@ The `cargo-pgx` package is a tool for building PostgreSQL extensions in Rust.
 
 1. Install `cargo-pgx`, with `cargo install cargo-pgx --version 0.4.5`
 
-2. Configure `cargo-pgx`, with `cargo pgx init --pgNN=$(which pg_config)`
+2. Configure `cargo-pgx`, with `cargo pgx init --pg14=$(which pg_config)`
 
-   Where `NN` is the major version of your Postgres installation (eg `--pg14=$(which pg_config)` if you're running Postgres 14)
+   If you're running an older PostgreSQL major version, replace `14` with the major version you're using.
 
 
 # Build and Install
@@ -64,10 +65,10 @@ cd pg_enquo
 Now you can now build and install `pg_enquo` with this one weird trick:
 
 ```sh
-cargo pgx install --features pgNN --release
+cargo pgx install --features pg14 --release
 ```
 
-Where `NN` is the major version of PostgreSQL you're using (such as `11`, `12`, `13`, or `14`).
+If you're running an older PostgreSQL major version, replace `14` with the major version you're using.
 
 This command requires write access to the directories specified by `PKGLIBDIR` and `SHAREDIR` in the output of `pg_config`.
 If necessary, run the command with `sudo`.
