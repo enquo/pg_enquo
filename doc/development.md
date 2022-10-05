@@ -4,7 +4,7 @@ We've got cake!
 
 # Pre-requisites
 
-* A relatively recent [Rust](https://rust-lang.org) toolchain.
+* A [Rust](https://rust-lang.org) 1.59.0 or later toolchain, with at least the `rustfmt` optional component installed.
 
 
 # Steps
@@ -20,7 +20,7 @@ We've got cake!
 
 3. Hack away to your heart's content.
 
-4. To run the test suite, run `cargo pgx test`
+4. To run the test suite, run `cargo pgx test --features pgNN pgNN`
 
-5. To get a running Postgres with your current extension available for use, run `cargo pgx run`.
+5. To get a running Postgres with your current extension available for use, run `cargo pgx run --features pgNN pgNN`.
    It'll print the port number that your temporary Postgres instance is listening on.
