@@ -3,6 +3,7 @@
 Before you get installing, let's get your environment setup.
 Once you have this sorted, you won't have to do it again for upgrades of `pg_enquo`.
 
+
 ## Install Rust
 
 To build `pg_enquo`, you must have Rust 1.59.0 or later installed.
@@ -52,7 +53,15 @@ The `cargo-pgx` package is a tool for building PostgreSQL extensions in Rust.
 
 # Build and Install
 
-After all that, you can now build and install `pg_enquo` with this command:
+The extension itself is built directly from the `pg_enquo` git repository.
+Start off by cloning that repository to your machine and getting into the checked out source:
+
+```sh
+git clone https://github.com/enquo/pg_enquo.git
+cd pg_enquo
+```
+
+Now you can now build and install `pg_enquo` with this one weird trick:
 
 ```sh
 cargo pgx install --features pgNN --release
