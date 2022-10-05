@@ -1,5 +1,5 @@
 comment = 'pg_enquo:  Created by pgx'
-default_version = '@CARGO_VERSION@'
+default_version = '0.0'
 module_pathname = '$libdir/pg_enquo'
 relocatable = false
 superuser = false
