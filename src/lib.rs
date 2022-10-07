@@ -2,6 +2,7 @@ use pgx::*;
 
 mod bigint;
 mod date;
+mod text;
 
 #[cfg(any(test, feature = "pg_test"))]
 mod test_helpers;

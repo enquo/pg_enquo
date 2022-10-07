@@ -15,7 +15,7 @@ pg14 = ["pgx/pg14", "pgx-tests/pg14" ]
 pg_test = []
 
 [dependencies]
-enquo-core = "0.4"
+enquo-core = "0.6"
 pgx = "=0.4.5"
 serde = "1.0"
 serde_json = "1.0"

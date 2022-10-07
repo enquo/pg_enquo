@@ -5,6 +5,7 @@ Please read the documentation for the data type for full details of what is and 
 
 * [`enquo_bigint`](bigint.md) -- 64-bit signed integer, capable of storing values from `-2^63` to `2^63-1`.
 * [`enquo_date`](date.md) -- a calendar date.
+* [`enquo_text`](text.md) -- UTF-8 textual data of arbitrary size.
 
 
 # A Note on "Reduced Security Operations"
