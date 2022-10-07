@@ -4,7 +4,7 @@ It stores values in the same range as the PostgreSQL `bigint`, from `-2^63` to `
 
 # Operations
 
-At the [default security level](https://enquo.org/about/threat-models#snapshot-security), and with default storage options, you can do the following with an `enquo_bigint`:
+At the [default security level](https://enquo.org/threat-models#snapshot-security), and with default storage options, you can do the following with an `enquo_bigint`:
 
 * Store an encrypted value.
 

@@ -10,7 +10,7 @@ Please read the documentation for the data type for full details of what is and 
 
 # A Note on "Reduced Security Operations"
 
-In our [default security model](https://enquo.org/about/threat-models#snapshot-security), Enquo-encrypted values are strongly encrypted and intended to be safe from cryptographic attack.
+In our [default security model](https://enquo.org/threat-models#snapshot-security), Enquo-encrypted values are strongly encrypted and intended to be safe from cryptographic attack.
 However, some common and useful operations are not possible at this security level, and so we provide the *option* to trade reduced security against more features.
 It can be difficult for non-cryptographers (heck, even expert cryptographers!) to decide exactly what the "cost" is of the security reduction is.
 

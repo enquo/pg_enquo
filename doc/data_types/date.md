@@ -4,7 +4,7 @@ It stores a calendar date as the combination of year, month, and day.  The range
 
 # Operations
 
-At the [default security level](https://enquo.org/about/threat-models#snapshot-security), and with default storage options, you can do the following with an `enquo_bigint`:
+At the [default security level](https://enquo.org/threat-models#snapshot-security), and with default storage options, you can do the following with an `enquo_bigint`:
 
 * Store an encrypted value.
 

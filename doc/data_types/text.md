@@ -4,7 +4,7 @@ It stores arbitrary-length UTF-8 text.
 
 # Operations
 
-At the [default security level](https://enquo.org/about/threat-models#snapshot-security), and with default storage options, you can do the following with an `enquo_text` value:
+At the [default security level](https://enquo.org/threat-models#snapshot-security), and with default storage options, you can do the following with an `enquo_text` value:
 
 * Store and retrieve the encrypted string.
 
