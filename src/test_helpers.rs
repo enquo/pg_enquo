@@ -1,9 +1,11 @@
-use enquo_core::{Field, Root};
+use enquo_core::{key_provider::Static, Field, Root};
 use pgx::*;
 
 pub fn field() -> Field {
-    let k: &[u8] = b"testkey";
-    Root::new(&k).unwrap().field(b"foo", b"bar").unwrap()
+    Root::new(&Static::new(b"testkey"))
+        .unwrap()
+        .field(b"foo", b"bar")
+        .unwrap()
 }
 
 pub fn arg(s: &String) -> (PgOid, Option<pg_sys::Datum>) {
