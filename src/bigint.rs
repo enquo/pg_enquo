@@ -143,12 +143,14 @@ mod tests {
         create_test_table();
         create_test_index();
 
-        let value = I64::new(0, b"test", &field()).unwrap();
-        let s = serde_json::to_string(&value).unwrap();
-        Spi::run(&format!(
-            r#"INSERT INTO bigint_tests VALUES ('{}', '{}')"#,
-            0, s
-        ));
+        for i in 0..2 {
+            let value = I64::new(i, b"test", &field()).unwrap();
+            let s = serde_json::to_string(&value).unwrap();
+            Spi::run(&format!(
+                r#"INSERT INTO bigint_tests VALUES ('{}', '{}')"#,
+                0, s
+            ));
+        }
     }
 
     #[pg_test]
@@ -178,7 +180,6 @@ mod tests {
             ));
         }
 
-        // Uncomment once we're on 0.5.0, https://github.com/tcdi/pgx/issues/728
-        //Spi::run("SELECT id FROM bigint_tests ORDER BY bi");
+        Spi::run("SELECT id FROM bigint_tests ORDER BY bi");
     }
 }

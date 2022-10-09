@@ -9,7 +9,7 @@ We've got cake!
 
 # Steps
 
-1. Install `cargo-pgx`, with `cargo install cargo-pgx --version 0.4.5`
+1. Install `cargo-pgx`, with `cargo install cargo-pgx --locked --version =0.5.0`
 
 2. Configure `cargo-pgx`, with `cargo pgx init --pgNN=download`
 

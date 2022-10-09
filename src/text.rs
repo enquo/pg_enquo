@@ -112,12 +112,11 @@ mod tests {
         create_test_index();
 
         let value = Text::new("onoes!", b"test", &field()).unwrap();
-        let _s = serde_json::to_string(&value).unwrap();
-        // Uncomment when we're using 0.5.0beta
-        //Spi::run(&format!(
-        //    r#"INSERT INTO text_tests VALUES ('{}', '{}')"#,
-        //    0, s
-        //));
+        let s = serde_json::to_string(&value).unwrap();
+        Spi::run(&format!(
+            r#"INSERT INTO text_tests VALUES ('{}', '{}')"#,
+            0, s
+        ));
     }
 
     #[pg_test]
