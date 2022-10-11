@@ -1,6 +1,6 @@
-A Postgres extension to provide Encrypted Query Operations (`enquo`).
+A PostgreSQL extension to provide Encrypted Query Operations (`enquo`).
 
-This extension is typically used in conjunction with a client library that produces Enquo ciphertexts for storage and querying within a Postgres database using `pg_enquo`.
+This extension is typically used in conjunction with a client library that produces Enquo ciphertexts for storage and querying within a PostgreSQL database using `pg_enquo`.
 See [the Enquo 'Components' page](https://enquo.org/components) for details of available client libraries.
 
 
