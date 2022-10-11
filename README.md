@@ -13,6 +13,8 @@ See [doc/installation.md](doc/installation.md) for all the details.
 
 See [doc/development.md](doc/development.md).
 
+All activity in this repo is required to adhere to the [Code of Conduct](CODE_OF_CONDUCT.md).
+
 
 # Licence
 
