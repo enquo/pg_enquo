@@ -45,7 +45,7 @@ For example, for Debian/Ubuntu, the server-side development headers are in a pac
 
 The `cargo-pgx` package is a tool for building PostgreSQL extensions in Rust.
 
-1. Install `cargo-pgx`, with `cargo install cargo-pgx --locked --version =0.5.3`
+1. Install `cargo-pgx`, with `cargo install cargo-pgx --locked --version =0.7.2`
 
 2. Configure `cargo-pgx`, with `cargo pgx init --pg14=$(which pg_config)`
 

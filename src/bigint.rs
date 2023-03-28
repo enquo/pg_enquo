@@ -26,11 +26,11 @@ mod tests {
     use serde_json;
 
     fn create_test_table() {
-        Spi::run("CREATE TABLE bigint_tests (id VARCHAR(255), bi enquo_bigint NOT NULL)");
+        Spi::run("CREATE TABLE bigint_tests (id VARCHAR(255), bi enquo_bigint NOT NULL)").unwrap();
     }
 
     fn create_test_index() {
-        Spi::run("CREATE INDEX bigint_test_idx ON bigint_tests(bi)");
+        Spi::run("CREATE INDEX bigint_test_idx ON bigint_tests(bi)").unwrap();
     }
 
     #[pg_test]
@@ -38,6 +38,7 @@ mod tests {
         assert!(Spi::get_one::<bool>(
             "SELECT COUNT(*) = 1 FROM pg_type WHERE typname = 'enquo_bigint'"
         )
+        .unwrap()
         .unwrap());
     }
 
@@ -61,7 +62,7 @@ mod tests {
                         (PgBuiltInOids::TEXTOID.oid(), op.to_string().into_datum()),
                         (PgBuiltInOids::OIDOID.oid(), type_oid_datum)
                     ]
-                ).unwrap()
+                ).unwrap().unwrap()
             );
         }
     }
@@ -76,7 +77,8 @@ mod tests {
         Spi::run(&format!(
             r#"INSERT INTO bigint_tests VALUES ('42', '{}')"#,
             s
-        ));
+        ))
+        .unwrap();
     }
 
     #[pg_test]
@@ -89,7 +91,8 @@ mod tests {
             Spi::run(&format!(
                 r#"INSERT INTO bigint_tests VALUES ('{}', '{}')"#,
                 i, s
-            ));
+            ))
+            .unwrap();
         }
 
         let v4 = I64::new_with_unsafe_parts(4, b"test", &field()).unwrap();
@@ -102,37 +105,42 @@ mod tests {
                 vec![arg(&s4)]
             )
             .unwrap()
+            .unwrap()
         );
         assert_eq!(
             4,
-            Spi::get_one_with_args::<u32>(
+            Spi::get_one_with_args::<i64>(
                 "SELECT COUNT(id) FROM bigint_tests WHERE bi < $1::enquo_bigint",
                 vec![arg(&s4)]
             )
             .unwrap()
+            .unwrap()
         );
         assert_eq!(
             5,
-            Spi::get_one_with_args::<u32>(
+            Spi::get_one_with_args::<i64>(
                 "SELECT COUNT(id) FROM bigint_tests WHERE bi <= $1::enquo_bigint",
                 vec![arg(&s4)]
             )
             .unwrap()
+            .unwrap()
         );
         assert_eq!(
             6,
-            Spi::get_one_with_args::<u32>(
+            Spi::get_one_with_args::<i64>(
                 "SELECT COUNT(id) FROM bigint_tests WHERE bi >= $1::enquo_bigint",
                 vec![arg(&s4)]
             )
             .unwrap()
+            .unwrap()
         );
         assert_eq!(
             5,
-            Spi::get_one_with_args::<u32>(
+            Spi::get_one_with_args::<i64>(
                 "SELECT COUNT(id) FROM bigint_tests WHERE bi > $1::enquo_bigint",
                 vec![arg(&s4)]
             )
+            .unwrap()
             .unwrap()
         );
     }
@@ -149,7 +157,8 @@ mod tests {
             Spi::run(&format!(
                 r#"INSERT INTO bigint_tests VALUES ('{}', '{}')"#,
                 0, s
-            ));
+            ))
+            .unwrap();
         }
     }
 
@@ -163,7 +172,8 @@ mod tests {
         Spi::run(&format!(
             r#"INSERT INTO bigint_tests VALUES ('{}', '{}')"#,
             0, s
-        ));
+        ))
+        .unwrap();
     }
 
     #[pg_test]
@@ -177,9 +187,10 @@ mod tests {
             Spi::run(&format!(
                 r#"INSERT INTO bigint_tests VALUES ('{}', '{}')"#,
                 i, s
-            ));
+            ))
+            .unwrap();
         }
 
-        Spi::run("SELECT id FROM bigint_tests ORDER BY bi");
+        Spi::run("SELECT id FROM bigint_tests ORDER BY bi").unwrap();
     }
 }

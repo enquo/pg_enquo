@@ -18,11 +18,11 @@ mod tests {
     use serde_json;
 
     fn create_test_table() {
-        Spi::run("CREATE TABLE text_tests (id VARCHAR(255), txt enquo_text NOT NULL)");
+        Spi::run("CREATE TABLE text_tests (id VARCHAR(255), txt enquo_text NOT NULL)").unwrap();
     }
 
     fn create_test_index() {
-        Spi::run("CREATE INDEX text_test_idx ON text_tests USING hash (txt)");
+        Spi::run("CREATE INDEX text_test_idx ON text_tests USING hash (txt)").unwrap();
     }
 
     #[pg_test]
@@ -30,6 +30,7 @@ mod tests {
         assert!(Spi::get_one::<bool>(
             "SELECT COUNT(*) = 1 FROM pg_type WHERE typname = 'enquo_text'"
         )
+        .unwrap()
         .unwrap());
     }
 
@@ -53,7 +54,7 @@ mod tests {
                         (PgBuiltInOids::TEXTOID.oid(), op.to_string().into_datum()),
                         (PgBuiltInOids::OIDOID.oid(), type_oid_datum)
                     ]
-                ).unwrap()
+                ).unwrap().unwrap()
             );
         }
     }
@@ -68,7 +69,8 @@ mod tests {
         Spi::run(&format!(
             r#"INSERT INTO text_tests VALUES ('hello', '{}')"#,
             s
-        ));
+        ))
+        .unwrap();
     }
 
     #[pg_test]
@@ -81,7 +83,8 @@ mod tests {
             Spi::run(&format!(
                 r#"INSERT INTO text_tests VALUES ('{}', '{}')"#,
                 i, s
-            ));
+            ))
+            .unwrap();
         }
 
         let v4 = Text::new_with_unsafe_parts("hello, 4 Enquo!", b"test", &field()).unwrap();
@@ -94,13 +97,15 @@ mod tests {
                 vec![arg(&s4)]
             )
             .unwrap()
+            .unwrap()
         );
         assert_eq!(
             9,
-            Spi::get_one_with_args::<u32>(
+            Spi::get_one_with_args::<i64>(
                 "SELECT COUNT(id) FROM text_tests WHERE txt <> $1::enquo_text",
                 vec![arg(&s4)]
             )
+            .unwrap()
             .unwrap()
         );
     }
@@ -116,7 +121,8 @@ mod tests {
         Spi::run(&format!(
             r#"INSERT INTO text_tests VALUES ('{}', '{}')"#,
             0, s
-        ));
+        ))
+        .unwrap();
     }
 
     #[pg_test]
@@ -129,6 +135,7 @@ mod tests {
         Spi::run(&format!(
             r#"INSERT INTO text_tests VALUES ('{}', '{}')"#,
             0, s
-        ));
+        ))
+        .unwrap();
     }
 }
