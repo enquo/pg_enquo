@@ -34,7 +34,7 @@ jobs:
 
       - name: Init pgx
         run: |
-          cargo install cargo-pgx --version 0.5.0
+          cargo install cargo-pgx --version 0.7.4
           cargo pgx init --pg${{ matrix.pg_version }}=download
 
       - name: Run testsuite
@@ -66,7 +66,7 @@ jobs:
 
       - name: Init pgx
         run: |
-          cargo install cargo-pgx --version 0.5.0
+          cargo install cargo-pgx --version 0.7.4
           cargo pgx init --pg14=download
 
       - name: Check formatting
