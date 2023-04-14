@@ -13,7 +13,7 @@ jobs:
 
     strategy:
       matrix:
-        pg_version: ["11", "12", "13", "14"]
+        pg_version: ["11", "12", "13", "14", "15"]
 
     steps:
       - uses: actions/checkout@v2
