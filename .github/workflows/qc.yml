@@ -30,7 +30,7 @@ jobs:
             ~/.cargo/registry
             ~/.pgx
             target/
-          key: ${{ runner.os }}-${{ steps.rust-install.outputs.rustc_hash}}-pg${{ matrix.pg_version }}
+          key: ${{ runner.os }}-${{ steps.rust-install.outputs.rustc_hash }}-pg${{ matrix.pg_version }}
 
       - name: Init pgx
         run: |
@@ -39,7 +39,7 @@ jobs:
 
       - name: Run testsuite
         run: |
-          cargo pgx test --features pg${{ matrix.pg_version}} pg${{ matrix.pg_version }}
+          cargo pgx test --features pg${{ matrix.pg_version }} pg${{ matrix.pg_version }}
 
   qc:
     runs-on: ubuntu-latest
@@ -62,7 +62,7 @@ jobs:
             ~/.cargo/registry
             ~/.pgx
             target/
-          key: ${{ runner.os }}-${{ steps.rust-install.outputs.rustc_hash}}-pg14
+          key: ${{ runner.os }}-${{ steps.rust-install.outputs.rustc_hash }}-pg15
 
       - name: Init pgx
         run: |
