@@ -1,8 +1,12 @@
 use pgx::*;
 
 mod bigint;
+mod boolean;
 mod date;
+mod ore;
 mod text;
+
+pub(crate) use ore::*;
 
 #[cfg(any(test, feature = "pg_test"))]
 mod test_helpers;

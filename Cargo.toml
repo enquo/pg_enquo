@@ -15,7 +15,7 @@ pg15 = ["pgx/pg15", "pgx-tests/pg15" ]
 pg_test = []
 
 [dependencies]
-enquo-core = "0.6"
+enquo-core = "0.7"
 pgx = "=0.7.2"
 serde = "1.0"
 serde_json = "1.0"
