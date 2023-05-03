@@ -1,5 +1,5 @@
 Listed below are the data types supported by `pg_enquo`.
-They are named for the corresponding PostgresSQL data types that they emulate.
+They are named for the corresponding PostgreSQL data types that they emulate.
 However, it is important to bear in mind that, due to the limitations of cryptographic research, they typically only support a subset of the features of the native data type.
 Please read the documentation for the data type for full details of what is and is not supported, and any security caveats surrounding them.
 
