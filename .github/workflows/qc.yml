@@ -1,7 +1,6 @@
 name: "Pre-merge Quality-Control"
 on:
   push:
-    branches: [main]
   pull_request:
     branches: [main]
   workflow_dispatch:
@@ -19,18 +18,16 @@ jobs:
       - uses: actions/checkout@v3
 
       - name: Install rust
-        uses: dtolnay/rust-toolchain@v1
-        with:
-          toolchain: stable
+        id: rust-install
+        uses: dtolnay/rust-toolchain@stable
 
       - uses: actions/cache@v3
         with:
           path: |
-            ~/.cargo/git
-            ~/.cargo/registry
+            ~/.cargo
             ~/.pgx
             target/
-          key: ${{ runner.os }}-${{ steps.rust-install.outputs.rustc_hash }}-pg${{ matrix.pg_version }}
+          key: ${{ runner.os }}-${{ steps.rust-install.outputs.cachekey }}-pg${{ matrix.pg_version }}
 
       - name: Init pgx
         run: |
@@ -50,24 +47,22 @@ jobs:
 
       - name: Install rust
         id: rust-install
-        uses: dtolnay/rust-toolchain@v1
+        uses: dtolnay/rust-toolchain@stable
         with:
-          toolchain: stable
           components: rustfmt, clippy
 
       - uses: actions/cache@v3
         with:
           path: |
-            ~/.cargo/git
-            ~/.cargo/registry
+            ~/.cargo
             ~/.pgx
             target/
-          key: ${{ runner.os }}-${{ steps.rust-install.outputs.rustc_hash }}-pg15
+          key: ${{ runner.os }}-${{ steps.rust-install.outputs.cachekey }}-pg15
 
       - name: Init pgx
         run: |
           cargo install cargo-pgx --version 0.7.4
-          cargo pgx init --pg14=download
+          cargo pgx init --pg15=download
 
       - name: Check formatting
         run: |
@@ -75,4 +70,4 @@ jobs:
 
       - name: Consult Clippy
         run: |
-          cargo clippy --features=pg14 -- -D warnings
+          cargo clippy --features=pg15 -- -D warnings
