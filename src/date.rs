@@ -1,4 +1,4 @@
-use enquo_core::Date;
+use enquo_core::datatype::Date;
 use pgx::*;
 use serde::{Deserialize, Serialize};
 

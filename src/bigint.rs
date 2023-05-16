@@ -1,4 +1,4 @@
-use enquo_core::I64;
+use enquo_core::datatype::I64;
 use pgx::*;
 use serde::{Deserialize, Serialize};
 

@@ -1,4 +1,4 @@
-use enquo_core::Boolean;
+use enquo_core::datatype::Boolean;
 use pgx::*;
 use serde::{Deserialize, Serialize};
 

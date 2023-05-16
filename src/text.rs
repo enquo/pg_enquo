@@ -1,9 +1,9 @@
-use enquo_core::Text;
+use enquo_core::datatype::Text;
 use pgx::*;
 use serde::{Deserialize, Serialize};
 use std::hash::Hash;
 
-use crate::enquo_ore_32_4;
+use crate::enquo_ore_32_8;
 
 #[derive(
     Serialize,
@@ -23,8 +23,8 @@ use crate::enquo_ore_32_4;
 pub struct enquo_text(Text);
 
 #[pg_extern]
-fn length(t: enquo_text) -> enquo_ore_32_4 {
-    enquo_ore_32_4(t.0.length().expect(
+fn length(t: enquo_text) -> enquo_ore_32_8 {
+    enquo_ore_32_8(t.0.length().expect(
         "Cannot extract length from instance of enquo_text that doesn't provide length information",
     ))
 }
@@ -200,7 +200,7 @@ mod tests {
         assert_eq!(
             2,
             Spi::get_one_with_args::<i64>(
-                "SELECT COUNT(id) FROM text_tests WHERE length(txt) > $1::enquo_set_ore_32_4",
+                "SELECT COUNT(id) FROM text_tests WHERE length(txt) > $1::enquo_set_ore_32_8",
                 vec![arg(&query_str)]
             )
             .unwrap()
@@ -209,7 +209,7 @@ mod tests {
         assert_eq!(
             "ohai!",
             Spi::get_one_with_args::<String>(
-                "SELECT id FROM text_tests WHERE length(txt) <= $1::enquo_set_ore_32_4",
+                "SELECT id FROM text_tests WHERE length(txt) <= $1::enquo_set_ore_32_8",
                 vec![arg(&query_str)]
             )
             .unwrap()
