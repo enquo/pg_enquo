@@ -1,5 +1,5 @@
 use enquo_core::datatype::Text;
-use pgx::*;
+use pgrx::*;
 use serde::{Deserialize, Serialize};
 use std::hash::Hash;
 
@@ -23,6 +23,7 @@ use crate::enquo_ore_32_8;
 pub struct enquo_text(Text);
 
 #[pg_extern]
+#[search_path(@extschema@)]
 fn length(t: enquo_text) -> enquo_ore_32_8 {
     enquo_ore_32_8(t.0.length().expect(
         "Cannot extract length from instance of enquo_text that doesn't provide length information",
@@ -34,8 +35,9 @@ fn length(t: enquo_text) -> enquo_ore_32_8 {
 mod tests {
     use super::*;
     use crate::test_helpers::*;
-    use enquo_core::{Text, ORE};
+    use enquo_core::datatype::{Text, ORE};
     use serde_json;
+    use pgrx::pg_sys::Oid;
 
     fn create_test_table() {
         Spi::run("CREATE TABLE text_tests (id VARCHAR(255), txt enquo_text NOT NULL)").unwrap();
@@ -53,10 +55,9 @@ mod tests {
         .unwrap()
         .unwrap());
     }
-
     #[pg_test]
     fn text_type_has_operators() {
-        let type_oid_datum = Spi::get_one_with_args::<u32>(
+        let type_oid_datum = Spi::get_one_with_args::<Oid>(
             "SELECT oid FROM pg_type WHERE typname = $1",
             vec![(
                 PgBuiltInOids::TEXTOID.oid(),
@@ -65,7 +66,6 @@ mod tests {
         )
         .unwrap()
         .into_datum();
-
         for op in vec!["=", "<>", "<", ">", "<=", ">="].iter() {
             assert!(
                 Spi::get_one_with_args::<bool>(
@@ -176,13 +176,14 @@ mod tests {
             .unwrap()
             .unwrap();
 
-        let actual_len: ORE<8, 16, u32> = serde_json::from_str(&ore_len_str).unwrap();
+        let actual_len: ORE<8, 16> = serde_json::from_str(&ore_len_str).unwrap();
         let lengths = Text::query_length(13, &field()).unwrap();
-        let expected_len = lengths.compatible_value(&actual_len).unwrap();
+        let expected_len = lengths.compatible_member(&actual_len).unwrap();
 
-        assert_eq!(expected_len, &actual_len);
+        assert_eq!(expected_len, actual_len);
     }
 
+    // these currently fail for https://github.com/pgcentralfoundation/pgrx/issues/1860
     #[pg_test]
     fn length_querying() {
         create_test_table();

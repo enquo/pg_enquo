@@ -1,5 +1,5 @@
 use enquo_core::datatype::Date;
-use pgx::*;
+use pgrx::*;
 use serde::{Deserialize, Serialize};
 
 #[derive(
@@ -22,8 +22,9 @@ pub struct enquo_date(Date);
 mod tests {
     use super::*;
     use crate::test_helpers::*;
-    use enquo_core::Date;
+    use enquo_core::datatype::Date;
     use serde_json;
+    use pgrx::pg_sys::Oid;
 
     fn create_test_table() {
         Spi::run("CREATE TABLE date_tests (id VARCHAR(255), dt enquo_date NOT NULL)").unwrap();
@@ -44,7 +45,7 @@ mod tests {
 
     #[pg_test]
     fn date_type_has_operators() {
-        let type_oid_datum = Spi::get_one_with_args::<u32>(
+        let type_oid_datum = Spi::get_one_with_args::<Oid>(
             "SELECT oid FROM pg_type WHERE typname = $1",
             vec![(
                 PgBuiltInOids::TEXTOID.oid(),

@@ -1,5 +1,5 @@
 use enquo_core::datatype::{Kith, ORE};
-use pgx::*;
+use pgrx::*;
 use serde::{Deserialize, Serialize};
 
 #[derive(Serialize, Deserialize, Debug, Eq, PartialEq, PostgresType, PostgresEq)]

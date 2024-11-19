@@ -1,5 +1,5 @@
 use enquo_core::ValueSet;
-use pgx::*;
+use pgrx::*;
 use serde::{Deserialize, Serialize};
 use std::hash::Hash;
 

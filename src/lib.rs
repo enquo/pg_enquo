@@ -1,4 +1,4 @@
-use pgx::*;
+use pgrx::*;
 
 mod bigint;
 mod boolean;

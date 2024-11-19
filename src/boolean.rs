@@ -1,5 +1,5 @@
 use enquo_core::datatype::Boolean;
-use pgx::*;
+use pgrx::*;
 use serde::{Deserialize, Serialize};
 
 #[derive(
@@ -22,8 +22,9 @@ pub struct enquo_boolean(Boolean);
 mod tests {
     use super::*;
     use crate::test_helpers::*;
-    use enquo_core::Boolean;
+    use enquo_core::datatype::Boolean;
     use serde_json;
+    use pgrx::pg_sys::Oid;
 
     fn create_test_table() {
         Spi::run("CREATE TABLE boolean_tests (id VARCHAR(255), value enquo_boolean NOT NULL)")
@@ -45,7 +46,7 @@ mod tests {
 
     #[pg_test]
     fn boolean_type_has_operators() {
-        let type_oid_datum = Spi::get_one_with_args::<u32>(
+        let type_oid_datum = Spi::get_one_with_args::<Oid>(
             "SELECT oid FROM pg_type WHERE typname = $1",
             vec![(
                 PgBuiltInOids::TEXTOID.oid(),
