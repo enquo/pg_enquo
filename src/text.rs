@@ -36,8 +36,8 @@ mod tests {
     use super::*;
     use crate::test_helpers::*;
     use enquo_core::datatype::{Text, ORE};
-    use serde_json;
     use pgrx::pg_sys::Oid;
+    use serde_json;
 
     fn create_test_table() {
         Spi::run("CREATE TABLE text_tests (id VARCHAR(255), txt enquo_text NOT NULL)").unwrap();
