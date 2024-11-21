@@ -31,7 +31,7 @@ jobs:
 
       - name: Init pgrx
         run: |
-          cargo install cargo-pgrx --version 0.7.4
+          cargo install cargo-pgrx --version 0.12.8
           cargo pgrx init --pg${{ matrix.pg_version }}=download
 
       - name: Run testsuite
@@ -61,7 +61,7 @@ jobs:
 
       - name: Init pgrx
         run: |
-          cargo install cargo-pgrx --version 0.7.4
+          cargo install cargo-pgrx --version 0.12.8
           cargo pgrx init --pg15=download
 
       - name: Check formatting
