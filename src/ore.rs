@@ -2,7 +2,18 @@ use enquo_core::datatype::{Kith, ORE};
 use pgrx::*;
 use serde::{Deserialize, Serialize};
 
-#[derive(Serialize, Deserialize, Debug, Eq, PartialEq, PostgresType, PostgresEq)]
+#[derive(
+    Serialize,
+    Deserialize,
+    Debug,
+    Eq,
+    PartialEq,
+    Ord,
+    PartialOrd,
+    PostgresType,
+    PostgresEq,
+    PostgresOrd,
+)]
 #[allow(non_camel_case_types)]
 pub struct enquo_ore_32_8(pub ORE<8, 16>);
 

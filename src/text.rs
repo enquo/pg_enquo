@@ -21,15 +21,12 @@ use crate::enquo_ore_32_8;
 )]
 #[allow(non_camel_case_types)]
 pub struct enquo_text(Text);
-
 #[pg_extern]
-#[search_path(@extschema@)]
 fn length(t: enquo_text) -> enquo_ore_32_8 {
     enquo_ore_32_8(t.0.length().expect(
         "Cannot extract length from instance of enquo_text that doesn't provide length information",
     ))
 }
-
 #[cfg(any(test, feature = "pg_test"))]
 #[pg_schema]
 mod tests {
@@ -183,7 +180,6 @@ mod tests {
         assert_eq!(expected_len, actual_len);
     }
 
-    // these currently fail for https://github.com/pgcentralfoundation/pgrx/issues/1860
     #[pg_test]
     fn length_querying() {
         create_test_table();
@@ -201,7 +197,7 @@ mod tests {
         assert_eq!(
             2,
             Spi::get_one_with_args::<i64>(
-                "SELECT COUNT(id) FROM text_tests WHERE length(txt) > $1::enquo_set_ore_32_8",
+                "SELECT COUNT(id) FROM text_tests WHERE length(txt) > $1::enquo_ore_32_8",
                 vec![arg(&query_str)]
             )
             .unwrap()
@@ -210,7 +206,7 @@ mod tests {
         assert_eq!(
             "ohai!",
             Spi::get_one_with_args::<String>(
-                "SELECT id FROM text_tests WHERE length(txt) <= $1::enquo_set_ore_32_8",
+                "SELECT id FROM text_tests WHERE length(txt) <= $1::enquo_ore_32_8",
                 vec![arg(&query_str)]
             )
             .unwrap()
