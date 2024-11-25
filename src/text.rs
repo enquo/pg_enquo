@@ -197,7 +197,7 @@ mod tests {
         assert_eq!(
             2,
             Spi::get_one_with_args::<i64>(
-                "SELECT COUNT(id) FROM text_tests WHERE length(txt) > $1::enquo_ore_32_8",
+                "SELECT COUNT(id) FROM text_tests WHERE length(txt) > $1::enquo_kith_ore_32_8",
                 vec![arg(&query_str)]
             )
             .unwrap()
@@ -206,7 +206,7 @@ mod tests {
         assert_eq!(
             "ohai!",
             Spi::get_one_with_args::<String>(
-                "SELECT id FROM text_tests WHERE length(txt) <= $1::enquo_ore_32_8",
+                "SELECT id FROM text_tests WHERE length(txt) <= $1::enquo_kith_ore_32_8",
                 vec![arg(&query_str)]
             )
             .unwrap()
