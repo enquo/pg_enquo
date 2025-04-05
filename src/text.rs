@@ -1,5 +1,5 @@
 use enquo_core::datatype::Text;
-use pgx::*;
+use pgrx::*;
 use serde::{Deserialize, Serialize};
 use std::hash::Hash;
 
@@ -21,20 +21,19 @@ use crate::enquo_ore_32_8;
 )]
 #[allow(non_camel_case_types)]
 pub struct enquo_text(Text);
-
 #[pg_extern]
 fn length(t: enquo_text) -> enquo_ore_32_8 {
     enquo_ore_32_8(t.0.length().expect(
         "Cannot extract length from instance of enquo_text that doesn't provide length information",
     ))
 }
-
 #[cfg(any(test, feature = "pg_test"))]
 #[pg_schema]
 mod tests {
     use super::*;
     use crate::test_helpers::*;
-    use enquo_core::{Text, ORE};
+    use enquo_core::datatype::{Text, ORE};
+    use pgrx::pg_sys::Oid;
     use serde_json;
 
     fn create_test_table() {
@@ -53,10 +52,9 @@ mod tests {
         .unwrap()
         .unwrap());
     }
-
     #[pg_test]
     fn text_type_has_operators() {
-        let type_oid_datum = Spi::get_one_with_args::<u32>(
+        let type_oid_datum = Spi::get_one_with_args::<Oid>(
             "SELECT oid FROM pg_type WHERE typname = $1",
             vec![(
                 PgBuiltInOids::TEXTOID.oid(),
@@ -65,7 +63,6 @@ mod tests {
         )
         .unwrap()
         .into_datum();
-
         for op in vec!["=", "<>", "<", ">", "<=", ">="].iter() {
             assert!(
                 Spi::get_one_with_args::<bool>(
@@ -176,11 +173,11 @@ mod tests {
             .unwrap()
             .unwrap();
 
-        let actual_len: ORE<8, 16, u32> = serde_json::from_str(&ore_len_str).unwrap();
+        let actual_len: ORE<8, 16> = serde_json::from_str(&ore_len_str).unwrap();
         let lengths = Text::query_length(13, &field()).unwrap();
-        let expected_len = lengths.compatible_value(&actual_len).unwrap();
+        let expected_len = lengths.compatible_member(&actual_len).unwrap();
 
-        assert_eq!(expected_len, &actual_len);
+        assert_eq!(expected_len, actual_len);
     }
 
     #[pg_test]
@@ -200,7 +197,7 @@ mod tests {
         assert_eq!(
             2,
             Spi::get_one_with_args::<i64>(
-                "SELECT COUNT(id) FROM text_tests WHERE length(txt) > $1::enquo_set_ore_32_8",
+                "SELECT COUNT(id) FROM text_tests WHERE length(txt) > $1::enquo_kith_ore_32_8",
                 vec![arg(&query_str)]
             )
             .unwrap()
@@ -209,7 +206,7 @@ mod tests {
         assert_eq!(
             "ohai!",
             Spi::get_one_with_args::<String>(
-                "SELECT id FROM text_tests WHERE length(txt) <= $1::enquo_set_ore_32_8",
+                "SELECT id FROM text_tests WHERE length(txt) <= $1::enquo_kith_ore_32_8",
                 vec![arg(&query_str)]
             )
             .unwrap()

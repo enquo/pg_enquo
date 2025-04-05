@@ -12,7 +12,7 @@ jobs:
 
     strategy:
       matrix:
-        pg_version: ["11", "12", "13", "14", "15"]
+        pg_version: ["12", "13", "14", "15", "16", "17"]
 
     steps:
       - uses: actions/checkout@v3
@@ -25,18 +25,18 @@ jobs:
         with:
           path: |
             ~/.cargo
-            ~/.pgx
+            ~/.pgrx
             target/
           key: ${{ runner.os }}-${{ steps.rust-install.outputs.cachekey }}-pg${{ matrix.pg_version }}
 
-      - name: Init pgx
+      - name: Init pgrx
         run: |
-          cargo install cargo-pgx --version 0.7.4
-          cargo pgx init --pg${{ matrix.pg_version }}=download
+          cargo install cargo-pgrx --version 0.12.8
+          cargo pgrx init --pg${{ matrix.pg_version }}=download
 
       - name: Run testsuite
         run: |
-          cargo pgx test --features pg${{ matrix.pg_version }} pg${{ matrix.pg_version }}
+          cargo pgrx test --features pg${{ matrix.pg_version }} pg${{ matrix.pg_version }}
 
   qc:
     runs-on: ubuntu-latest
@@ -55,14 +55,14 @@ jobs:
         with:
           path: |
             ~/.cargo
-            ~/.pgx
+            ~/.pgrx
             target/
           key: ${{ runner.os }}-${{ steps.rust-install.outputs.cachekey }}-pg15
 
-      - name: Init pgx
+      - name: Init pgrx
         run: |
-          cargo install cargo-pgx --version 0.7.4
-          cargo pgx init --pg15=download
+          cargo install cargo-pgrx --version 0.12.8
+          cargo pgrx init --pg15=download
 
       - name: Check formatting
         run: |

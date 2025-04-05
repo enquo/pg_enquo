@@ -1,14 +1,25 @@
 use enquo_core::datatype::{Kith, ORE};
-use pgx::*;
+use pgrx::*;
 use serde::{Deserialize, Serialize};
 
-#[derive(Serialize, Deserialize, Debug, Eq, PartialEq, PostgresType, PostgresEq)]
+#[derive(
+    Serialize,
+    Deserialize,
+    Debug,
+    Eq,
+    PartialEq,
+    Ord,
+    PartialOrd,
+    PostgresType,
+    PostgresEq,
+    PostgresOrd,
+)]
 #[allow(non_camel_case_types)]
 pub struct enquo_ore_32_8(pub ORE<8, 16>);
 
 #[derive(Serialize, Deserialize, Debug, PostgresType)]
 #[allow(non_camel_case_types)]
-pub struct enquo_kith_ore_32_8(Kith<ORE<8, 16>>);
+pub struct enquo_kith_ore_32_8(pub Kith<ORE<8, 16>>);
 
 #[pg_operator(immutable, parallel_safe)]
 #[opname(<)]

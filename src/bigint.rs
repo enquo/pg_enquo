@@ -1,5 +1,5 @@
 use enquo_core::datatype::I64;
-use pgx::*;
+use pgrx::*;
 use serde::{Deserialize, Serialize};
 
 #[derive(
@@ -22,7 +22,8 @@ pub struct enquo_bigint(I64);
 mod tests {
     use super::*;
     use crate::test_helpers::*;
-    use enquo_core::I64;
+    use enquo_core::datatype::I64;
+    use pgrx::pg_sys::Oid;
     use serde_json;
 
     fn create_test_table() {
@@ -44,7 +45,7 @@ mod tests {
 
     #[pg_test]
     fn type_has_operators() {
-        let type_oid_datum = Spi::get_one_with_args::<u32>(
+        let type_oid_datum = Spi::get_one_with_args::<Oid>(
             "SELECT oid FROM pg_type WHERE typname = $1",
             vec![(
                 PgBuiltInOids::TEXTOID.oid(),
