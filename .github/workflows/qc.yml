@@ -29,6 +29,9 @@ jobs:
             target/
           key: ${{ runner.os }}-${{ steps.rust-install.outputs.cachekey }}-pg${{ matrix.pg_version }}
 
+      - name: Install libreadline-dev
+        run: sudo apt-get update && sudo apt-get install -y libreadline-dev
+
       - name: Init pgrx
         run: |
           cargo install cargo-pgrx --version 0.12.8
@@ -58,6 +61,9 @@ jobs:
             ~/.pgrx
             target/
           key: ${{ runner.os }}-${{ steps.rust-install.outputs.cachekey }}-pg15
+
+      - name: Install libreadline-dev
+        run: sudo apt-get update && sudo apt-get install -y libreadline-dev
 
       - name: Init pgrx
         run: |
