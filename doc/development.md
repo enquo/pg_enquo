@@ -9,9 +9,9 @@ We've got cake!
 
 # Steps
 
-1. Install `cargo-pgx`, with `cargo install cargo-pgx --locked --version =0.7.4`
+1. Install `cargo-pgrx`, with `cargo install cargo-pgrx --locked --version =0.7.4`
 
-2. Configure `cargo-pgx`, with `cargo pgx init --pgNN=download`
+2. Configure `cargo-pgrx`, with `cargo pgrx init --pgNN=download`
 
    Where `NN` is the major version of the Postgres version you want to use as your "primary" test platform.
 
@@ -20,7 +20,7 @@ We've got cake!
 
 3. Hack away to your heart's content.
 
-4. To run the test suite, run `cargo pgx test --features pgNN pgNN`
+4. To run the test suite, run `cargo pgrx test --features pgNN pgNN`
 
-5. To get a running Postgres with your current extension available for use, run `cargo pgx run --features pgNN pgNN`.
+5. To get a running Postgres with your current extension available for use, run `cargo pgrx run --features pgNN pgNN`.
    It'll print the port number that your temporary Postgres instance is listening on.
