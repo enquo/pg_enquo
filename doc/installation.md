@@ -41,13 +41,13 @@ If you are running a packaged version of PostgreSQL, these may be in a package t
 For example, for Debian/Ubuntu, the server-side development headers are in a package named **`postgresql-server-dev-14`** (switch out the `14` for your PostgreSQL major version, if you running an older version).
 
 
-## Install and Configure `cargo-pgx`
+## Install and Configure `cargo-pgrx`
 
-The `cargo-pgx` package is a tool for building PostgreSQL extensions in Rust.
+The `cargo-pgrx` package is a tool for building PostgreSQL extensions in Rust.
 
-1. Install `cargo-pgx`, with `cargo install cargo-pgrx --locked --version=0.12.8`
+1. Install `cargo-pgrx`, with `cargo install cargo-pgrx --locked --version=0.12.8`
 
-2. Configure `cargo-pgx`, with `cargo pgx init --pg14=$(which pg_config)`
+2. Configure `cargo-pgrx`, with `cargo pgrx init --pg14=$(which pg_config)`
 
    If you're running an older PostgreSQL major version, replace `14` with the major version you're using.
 
@@ -65,7 +65,7 @@ cd pg_enquo
 Now you can now build and install `pg_enquo` with this one weird trick:
 
 ```sh
-cargo pgx install --features pg14 --release
+cargo pgrx install --features pg14 --release
 ```
 
 If you're running an older PostgreSQL major version, replace `14` with the major version you're using.
